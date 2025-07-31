@@ -61,8 +61,8 @@ void BreakWindowControl::createWindows(SaneBreak::BreakType type) {
   }
 }
 
-void BreakWindowControl::show(SaneBreak::BreakType type) {
-  AbstractWindowControl::show(type);
+void BreakWindowControl::show(SaneBreak::BreakType type, bool optional) {
+  AbstractWindowControl::show(type, optional);
   soundPlayer->play(type == SaneBreak::BreakType::Small
                         ? preferences->smallStartBell->get()
                         : preferences->bigStartBell->get());

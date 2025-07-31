@@ -16,6 +16,7 @@
 #include "config.h"
 #include "core/flags.h"
 #include "core/idle-time.h"
+#include "window-control.h"
 
 AbstractWindowControl::AbstractWindowControl(const WindowDependencies &deps,
                                              QObject *parent)
@@ -28,8 +29,9 @@ AbstractWindowControl::AbstractWindowControl(const WindowDependencies &deps,
           &AbstractWindowControl::onIdleEnd);
 }
 
-void AbstractWindowControl::show(SaneBreak::BreakType type) {
+void AbstractWindowControl::show(SaneBreak::BreakType type, bool optional) {
   m_isShowing = true;
+  m_isOptional = optional;
   m_currentType = type;
   m_totalSeconds = type == SaneBreak::BreakType::Big ? preferences->bigFor->get()
                                                      : preferences->smallFor->get();
@@ -125,12 +127,23 @@ void AbstractWindowControl::exitForceBreak() {
   m_remainingSeconds = m_totalSeconds;
   m_isForceBreak = false;
   m_secondsToForceBreak = preferences->flashFor->get();
-  for (auto w : std::as_const(m_windows)) {
-    w->resizeToNormal();
-    w->showScreenLockButton(false);
-    w->showExitForceBreakButton(false);
+  if (m_isOptional) {
+    close();
+  } else {
+    for (auto w : std::as_const(m_windows)) {
+      w->resizeToNormal();
+      w->showScreenLockButton(false);
+      w->showExitForceBreakButton(false);
+    }
   }
 }
+
+void AbstractWindowControl::reduceTimer(int seconds) {
+  m_remainingSeconds -= seconds;
+  tick();
+}
+
+void AbstractWindowControl::skipPrompt() { onIdleStart(); }
 
 void AbstractWindowControl::onIdleStart() {
   if (m_isForceBreak || m_remainingSeconds <= 0) return;
@@ -145,10 +158,14 @@ void AbstractWindowControl::onIdleEnd() {
   // when the break almost finishes.
   if (m_isForceBreak || m_remainingSeconds <= 3) return;
   emit countDownStateChanged(false);
-  for (auto w : std::as_const(m_windows)) {
-    w->resizeToNormal();
+  if (m_isOptional) {
+    close();
+  } else {
+    for (auto w : std::as_const(m_windows)) {
+      w->resizeToNormal();
+    }
+    m_remainingSeconds = m_totalSeconds;
   }
-  m_remainingSeconds = m_totalSeconds;
 }
 
 void AbstractWindowControl::deleteWindows() {

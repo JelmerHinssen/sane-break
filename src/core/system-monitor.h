@@ -17,7 +17,7 @@ class AbstractSystemMonitor : public QObject {
  signals:
   void idleStarted();
   void idleEnded();
-  void sleepEnded();
+  void sleepEnded(int duration);
   void batteryPowered();
   void adaptorPowered();
   void programStarted();

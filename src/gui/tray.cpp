@@ -62,6 +62,14 @@ StatusTrayWindow::StatusTrayWindow(SanePreferences *preferences, QObject *parent
 
   menu->addSeparator();
 
+  testAction = menu->addAction(tr("Test"));
+#ifndef NDEBUG
+  testAction->setVisible(true);
+#else
+  testAction->setVisible(false);
+#endif
+  connect(testAction, &QAction::triggered, this, &StatusTrayWindow::testTriggered);
+
   connect(menu->addAction(tr("Preferences")), &QAction::triggered, this,
           &StatusTrayWindow::preferenceWindowRequested);
 

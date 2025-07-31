@@ -63,12 +63,15 @@ class AbstractWindowControl : public QObject {
   AbstractWindowControl(const WindowDependencies &deps, QObject *parent = nullptr);
   ~AbstractWindowControl() = default;
 
-  virtual void show(SaneBreak::BreakType type);
+  virtual void show(SaneBreak::BreakType type, bool optional = false);
   virtual void lockScreen() {};
   virtual void close();
   void tick();
   void exitForceBreak();
   bool isShowing() { return m_isShowing; };
+  void reduceTimer(int seconds);
+  void skipPrompt();
+  int remainingSeconds() { return m_remainingSeconds; }
 
  signals:
   void timeout();
@@ -79,6 +82,7 @@ class AbstractWindowControl : public QObject {
   SaneBreak::BreakType m_currentType;
   bool m_isShowing = false;
   bool m_isForceBreak = false;
+  bool m_isOptional = false;
   int m_numberForceBreakExits = 0;
   int m_secondsToForceBreak;
   int m_remainingSeconds;

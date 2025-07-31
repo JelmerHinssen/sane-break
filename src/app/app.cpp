@@ -34,9 +34,9 @@ SaneBreakApp::SaneBreakApp(const AppDependencies &deps, QObject *parent)
   tray = StatusTrayWindow::createTrayOrWindow(preferences, this);
 
   connect(this, &SaneBreakApp::trayDataUpdated, tray, &StatusTrayWindow::update);
-  connect(tray, &StatusTrayWindow::nextBreakRequested, this, &SaneBreakApp::breakNow);
-  connect(tray, &StatusTrayWindow::nextBigBreakRequested, this,
-          &SaneBreakApp::bigBreakNow);
+  connect(tray, &StatusTrayWindow::nextBreakRequested, [this]() { breakNow(true); });
+  connect(tray, &StatusTrayWindow::nextBigBreakRequested,
+          [this]() { bigBreakNow(true); });
   connect(tray, &StatusTrayWindow::smallBreakInsteadRequested, this,
           &SaneBreakApp::smallBreakInstead);
   connect(tray, &StatusTrayWindow::postponeRequested, this, &SaneBreakApp::postpone);
@@ -45,6 +45,7 @@ SaneBreakApp::SaneBreakApp(const AppDependencies &deps, QObject *parent)
   connect(tray, &StatusTrayWindow::enableBreakRequested, this,
           &SaneBreakApp::enableBreak);
   connect(tray, &StatusTrayWindow::quitRequested, this, &SaneBreakApp::confirmQuit);
+  connect(tray, &StatusTrayWindow::testTriggered, this, &SaneBreakApp::onTestTrigger);
   connect(preferences->language, &SettingWithSignal::changed, this,
           [this]() { LanguageSelect::setLanguage(preferences->language->get()); });
   connect(this, &SaneBreakApp::quit, qApp, &QApplication::quit, Qt::QueuedConnection);

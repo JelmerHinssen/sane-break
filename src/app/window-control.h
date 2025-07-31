@@ -23,7 +23,7 @@ class BreakWindowControl : public AbstractWindowControl {
   static BreakWindowControl *create(SanePreferences *preferences,
                                     QObject *parent = nullptr);
 
-  void show(SaneBreak::BreakType type) override;
+  void show(SaneBreak::BreakType type, bool optional) override;
   void lockScreen() override;
   void close() override;
 

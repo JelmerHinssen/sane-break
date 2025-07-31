@@ -5,13 +5,17 @@
 #include "core/app.h"
 
 #include <QObject>
+#include <iostream>
 
+#include "app.h"
 #include "core/flags.h"
 #include "core/idle-time.h"
 #include "core/preferences.h"
 #include "core/system-monitor.h"
 #include "core/timer.h"
 #include "core/window-control.h"
+
+using namespace std;
 
 AbstractApp::AbstractApp(const AppDependencies &deps, QObject *parent)
     : QObject(parent),
@@ -101,18 +105,18 @@ void AbstractApp::resetSecondsToNextBreak() {
   updateTray();
 }
 
-void AbstractApp::breakNow() {
-  m_secondsToNextBreak = 0;
+void AbstractApp::breakNow(bool optional) {
   m_windowControl->show(smallBreaksBeforeBig() == 0 ? SaneBreak::BreakType::Big
-                                                    : SaneBreak::BreakType::Small);
+                                                    : SaneBreak::BreakType::Small,
+                        optional);
   updateTray();
   // For testing user is idle after break end
   m_oneshotIdleTimer->startWatching();
 }
 
-void AbstractApp::bigBreakNow() {
+void AbstractApp::bigBreakNow(bool optional) {
   m_breakCycleCount = 0;
-  breakNow();
+  breakNow(optional);
 }
 
 void AbstractApp::smallBreakInstead() {
@@ -227,11 +231,13 @@ void AbstractApp::onBattery() {
 // No need to check settings because it does nothing if not paused with this
 void AbstractApp::onPower() { resumeBreak(SaneBreak::PauseReason::OnBattery); }
 
-void AbstractApp::onSleepEnd() {
-  // We reset these regardless of paused or not
-  m_breakCycleCount = 1;
-  m_windowControl->close();
-  resetSecondsToNextBreak();
+void AbstractApp::onSleepEnd(int duration) {
+  if (!m_windowControl->isShowing()) {
+    breakNow(true);
+    m_windowControl->skipPrompt();
+  }
+  int breakSeconds = min(duration / 1000, m_windowControl->remainingSeconds() - 5);
+  m_windowControl->reduceTimer(breakSeconds);
 }
 
 void AbstractApp::onOneshotIdleEnd() {
@@ -248,3 +254,5 @@ void AbstractApp::onBatterySettingChange() {
   else if (m_systemMonitor->isOnBattery())
     pauseBreak(SaneBreak::PauseReason::OnBattery);
 }
+
+void AbstractApp::onTestTrigger() { m_secondsToNextBreak = 30; }

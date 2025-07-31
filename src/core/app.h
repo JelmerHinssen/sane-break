@@ -42,8 +42,8 @@ class AbstractApp : public QObject {
   virtual void doLockScreen() = 0;
   virtual bool confirmPostpone(int secondsToPostpone) = 0;
 
-  void breakNow();
-  void bigBreakNow();
+  void breakNow(bool optional = false);
+  void bigBreakNow(bool optional = false);
   // Take a small break when big break is on
   void smallBreakInstead();
   void postpone(int secs);
@@ -69,7 +69,7 @@ class AbstractApp : public QObject {
   AbstractWindowControl *m_windowControl;
 
   void tick();
-  void onSleepEnd();
+  void onSleepEnd(int duration);
   void onBreakCountDownStateChange(bool countingDown);
   void onBreakAbort();
   void onBreakEnd();
@@ -81,6 +81,7 @@ class AbstractApp : public QObject {
   void onProgramStart();
   void onProgramStop();
   void onBatterySettingChange();
+  void onTestTrigger();
 
   int smallBreaksBeforeBig();
   void updateTray();
