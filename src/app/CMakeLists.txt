@@ -158,7 +158,7 @@ set_target_properties(
              MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}
              MACOSX_BUNDLE_GUI_IDENTIFIER io.github.AllanChain.sane-break
              MACOSX_BUNDLE TRUE
-             WIN32_EXECUTABLE TRUE
+             WIN32_EXECUTABLE "$<NOT:$<CONFIG:Debug>>"
              ${BUNDLE_ID_OPTION}
 )
 

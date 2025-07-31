@@ -970,6 +970,13 @@ All color are in &lt;code&gt;#AARRGGBB&lt;/code&gt; format.</string>
              </layout>
             </item>
             <item>
+              <widget class="QCheckBox" name="readingModeCheck">
+                <property name="text">
+                  <string>Reading mode</string>
+                </property>
+              </widget>
+            </item>
+            <item>
              <widget class="QCheckBox" name="pauseOnBatteryCheck">
               <property name="text">
                <string>Pause on battery</string>

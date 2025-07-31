@@ -215,7 +215,9 @@ int AbstractApp::smallBreaksBeforeBig() {
   return (breakEvery - m_breakCycleCount) % breakEvery;
 }
 
-void AbstractApp::onIdleStart() { pauseBreak(SaneBreak::PauseReason::Idle); }
+void AbstractApp::onIdleStart() {
+  if (!preferences->readingMode->get()) (SaneBreak::PauseReason::Idle);
+}
 void AbstractApp::onIdleEnd() { resumeBreak(SaneBreak::PauseReason::Idle); }
 void AbstractApp::onProgramStart() { pauseBreak(SaneBreak::PauseReason::AppOpen); }
 void AbstractApp::onProgramStop() { resumeBreak(SaneBreak::PauseReason::AppOpen); }

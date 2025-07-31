@@ -57,6 +57,7 @@ SanePreferences::SanePreferences(QSettings* settings, QObject* parent)
   resetAfterPause = new Setting<int>(settings, "pause/reset-after", 120);
   resetCycleAfterPause = new Setting<int>(settings, "pause/reset-cycle-after", 300);
   pauseOnBattery = new Setting<bool>(settings, "pause/on-battery", false);
+  readingMode = new Setting<bool>(settings, "pause/reading-mode", false);
   programsToMonitor =
       new Setting<QStringList>(settings, "pause/programs-to-monitor", QStringList());
 

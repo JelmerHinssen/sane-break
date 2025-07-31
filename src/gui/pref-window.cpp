@@ -221,6 +221,8 @@ PreferenceWindow::PreferenceWindow(SanePreferences *preferences, QWidget *parent
           });
   controllers->add(new PrefController<QCheckBox, Setting<bool>>(
       ui->pauseOnBatteryCheck, preferences->pauseOnBattery));
+  controllers->add(new PrefController<QCheckBox, Setting<bool>>(
+      ui->readingModeCheck, preferences->readingMode));
 #ifdef LINUX_DIST_FLATPAK
   ui->programList->setHidden(true);
   ui->programListLabel->setHidden(true);

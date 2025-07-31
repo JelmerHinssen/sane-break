@@ -112,6 +112,7 @@ class SanePreferences : public QObject {
   Setting<int> *resetAfterPause;
   Setting<int> *resetCycleAfterPause;
   Setting<bool> *pauseOnBattery;
+  Setting<bool> *readingMode;
   Setting<QStringList> *programsToMonitor;
 
   Setting<QString> *smallStartBell;
