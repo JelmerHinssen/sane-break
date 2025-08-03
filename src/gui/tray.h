@@ -36,7 +36,7 @@ class StatusTrayWindow : public QObject {
   void preferenceWindowRequested();
   void postponeRequested(int secs);
   void quitRequested();
-  void testTriggered();
+  void testTriggered(int index);
 
  protected:
   SanePreferences *preferences;
@@ -47,7 +47,6 @@ class StatusTrayWindow : public QObject {
   QAction *bigBreakAction;
   QAction *smallBreakInsteadAction;
   QAction *enableBreak;
-  QAction *testAction;
 };
 
 class StatusTray : public StatusTrayWindow {

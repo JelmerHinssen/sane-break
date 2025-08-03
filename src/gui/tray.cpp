@@ -62,13 +62,12 @@ StatusTrayWindow::StatusTrayWindow(SanePreferences *preferences, QObject *parent
 
   menu->addSeparator();
 
-  testAction = menu->addAction(tr("Test"));
 #ifndef NDEBUG
-  testAction->setVisible(true);
-#else
-  testAction->setVisible(false);
+  for (int i = 0; i < 5; i++) {
+    connect(menu->addAction(tr("Test %1").arg(i + 1)), &QAction::triggered, this,
+            [this, i]() { emit testTriggered(i); });
+  }
 #endif
-  connect(testAction, &QAction::triggered, this, &StatusTrayWindow::testTriggered);
 
   connect(menu->addAction(tr("Preferences")), &QAction::triggered, this,
           &StatusTrayWindow::preferenceWindowRequested);

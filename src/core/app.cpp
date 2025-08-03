@@ -232,11 +232,15 @@ void AbstractApp::onBattery() {
 void AbstractApp::onPower() { resumeBreak(SaneBreak::PauseReason::OnBattery); }
 
 void AbstractApp::onSleepEnd(int duration) {
+  if (duration / 1000 > preferences->bigFor->get()) {
+    // If the break is longer than big break, this break is a big break
+    m_breakCycleCount = 0;
+  }
   if (!m_windowControl->isShowing()) {
     breakNow(true);
     m_windowControl->skipPrompt();
   }
-  int breakSeconds = min(duration / 1000, m_windowControl->remainingSeconds() - 5);
+  int breakSeconds = min(duration / 1000, m_windowControl->remainingSeconds() - 2);
   m_windowControl->reduceTimer(breakSeconds);
 }
 
@@ -255,4 +259,13 @@ void AbstractApp::onBatterySettingChange() {
     pauseBreak(SaneBreak::PauseReason::OnBattery);
 }
 
-void AbstractApp::onTestTrigger() { m_secondsToNextBreak = 30; }
+void AbstractApp::onTestTrigger(int index) {
+  switch (index) {
+    case 0:
+      onSleepEnd(30000);  // Simulate sleep end after 30 seconds
+      break;
+    case 1:
+      onSleepEnd(500000);  // Simulate sleep end after 500 seconds
+      break;
+  }
+}

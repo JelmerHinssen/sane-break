@@ -81,7 +81,7 @@ class AbstractApp : public QObject {
   void onProgramStart();
   void onProgramStop();
   void onBatterySettingChange();
-  void onTestTrigger();
+  void onTestTrigger(int index);
 
   int smallBreaksBeforeBig();
   void updateTray();
