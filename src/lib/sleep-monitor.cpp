@@ -8,6 +8,8 @@
 #include <QObject>
 #include <QTimer>
 
+#include "lib/screen-lock.h"
+
 SleepMonitor::SleepMonitor(QObject* parent) : QObject(parent) {
   timer = new QTimer(this);
   timer->setInterval(watchAccuracy);
@@ -18,6 +20,7 @@ SleepMonitor::SleepMonitor(QObject* parent) : QObject(parent) {
 
 void SleepMonitor::tick() {
   int currentTime = QDateTime::currentMSecsSinceEpoch();
+  if (screenLocked()) return;  // Treat a locked screen the same as sleeping
   if (currentTime - lastAwake > 2 * watchAccuracy) {
     emit sleepEnd(currentTime - lastAwake);
   }

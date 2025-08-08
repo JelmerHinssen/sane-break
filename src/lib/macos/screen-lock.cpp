@@ -39,3 +39,7 @@ bool lockScreen() {
   if (!lockScreenWithFramework()) return lockScreenWithSleep();
   return true;
 }
+
+bool screenLocked() {
+  return false;  // Not implemented yet
+}

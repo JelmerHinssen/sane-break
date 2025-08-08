@@ -10,3 +10,7 @@ bool lockScreen() {
   process.waitForFinished();
   return process.exitCode() == 0;
 }
+
+bool screenLocked() {
+  return false; // Not implemented yet
+}

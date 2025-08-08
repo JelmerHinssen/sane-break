@@ -4,4 +4,18 @@
 
 #include <windows.h>
 
+#include <QWidget>
+#include <iostream>
+
+using namespace std;
+
 bool lockScreen() { return LockWorkStation(); }
+
+bool screenLocked() {
+  auto foreground = GetForegroundWindow();
+  if (!foreground) return true;
+  wchar_t title[255];
+  GetWindowText(foreground, title, 255);
+  if (wstring(title) == L"Windows-standaardvergrendelingsscherm") return true;
+  return false;
+}
