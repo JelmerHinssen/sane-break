@@ -54,6 +54,9 @@ void BreakWindowControl::createWindows(SaneBreak::BreakType type) {
   QList<QScreen *> screens = QApplication::screens();
 
   BreakData data = breakData(type);
+  if (m_isOptional) {
+    data.message += " " + tr("(optional)");
+  }
   for (QScreen *screen : std::as_const(screens)) {
     BreakWindow *w = new BreakWindow(data);
     m_windows.append(w);

@@ -23,6 +23,7 @@ AbstractWindowControl::AbstractWindowControl(const WindowDependencies &deps,
     : QObject(parent), preferences(deps.preferences), m_idleTimer(deps.idleTimer) {
   if (!m_idleTimer->parent()) m_idleTimer->setParent(this);
 
+  m_idleTimer->setMinIdleTime(5000);
   connect(m_idleTimer, &SystemIdleTime::idleStart, this,
           &AbstractWindowControl::onIdleStart);
   connect(m_idleTimer, &SystemIdleTime::idleEnd, this,
