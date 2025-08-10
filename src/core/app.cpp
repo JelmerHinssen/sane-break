@@ -95,7 +95,7 @@ void AbstractApp::tick() {
   m_secondsToNextBreak--;
   // Also count second since we last taken break
   m_secondsSinceLastBreak++;
-  if (m_secondsToNextBreak <= 0) return breakNow();
+  if (m_secondsToNextBreak <= 0 && !isInMeeting()) return breakNow();
   updateTray();
 }
 
@@ -266,6 +266,16 @@ void AbstractApp::onTestTrigger(int index) {
       break;
     case 1:
       onSleepEnd(500000);  // Simulate sleep end after 500 seconds
+      break;
+    case 2:
+      for (int i = 0; i < 300; i++) {
+        tick();  // Fast forward 5 minutes
+      }
+      break;
+    case 3:
+      for (int i = 0; i < 1800; i++) {
+        tick();  // Fast forward 30 minutes
+      }
       break;
   }
 }

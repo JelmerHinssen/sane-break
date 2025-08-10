@@ -20,7 +20,7 @@ SleepMonitor::SleepMonitor(QObject* parent) : QObject(parent) {
 
 void SleepMonitor::tick() {
   int currentTime = QDateTime::currentMSecsSinceEpoch();
-  if (screenLocked()) return;  // Treat a locked screen the same as sleeping
+  // if (screenLocked()) return;  // Treat a locked screen the same as sleeping
   if (currentTime - lastAwake > 2 * watchAccuracy) {
     emit sleepEnd(currentTime - lastAwake);
   }

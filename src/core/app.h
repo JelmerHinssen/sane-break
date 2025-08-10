@@ -50,6 +50,7 @@ class AbstractApp : public QObject {
   void pauseBreak(SaneBreak::PauseReasons reason);
   void resumeBreak(SaneBreak::PauseReasons reason);
   void enableBreak();
+  bool isInMeeting() { return m_inMeeting; }
 
  signals:
   void trayDataUpdated(TrayData trayData);
@@ -59,6 +60,7 @@ class AbstractApp : public QObject {
   int m_secondsPaused = 0;
   int m_secondsSinceLastBreak = 0;
   int m_secondsToNextBreak;
+  bool m_inMeeting = false;
   SaneBreak::PauseReasons m_pauseReasons = {};
 
   SanePreferences *preferences;

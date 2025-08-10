@@ -37,6 +37,7 @@ class StatusTrayWindow : public QObject {
   void postponeRequested(int secs);
   void quitRequested();
   void testTriggered(int index);
+  void meetingModeChanged(bool active);
 
  protected:
   SanePreferences *preferences;

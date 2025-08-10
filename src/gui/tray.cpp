@@ -59,7 +59,11 @@ StatusTrayWindow::StatusTrayWindow(SanePreferences *preferences, QObject *parent
   enableBreak->setVisible(false);
   connect(enableBreak, &QAction::triggered, this,
           &StatusTrayWindow::enableBreakRequested);
-
+  auto meetingMode = menu->addAction(tr("Meeting"));
+  meetingMode->setCheckable(true);
+  meetingMode->setChecked(false);
+  connect(meetingMode, &QAction::triggered,
+          [this, meetingMode]() { emit meetingModeChanged(meetingMode->isChecked()); });
   menu->addSeparator();
 
 #ifndef NDEBUG

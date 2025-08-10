@@ -46,6 +46,8 @@ SaneBreakApp::SaneBreakApp(const AppDependencies &deps, QObject *parent)
           &SaneBreakApp::enableBreak);
   connect(tray, &StatusTrayWindow::quitRequested, this, &SaneBreakApp::confirmQuit);
   connect(tray, &StatusTrayWindow::testTriggered, this, &SaneBreakApp::onTestTrigger);
+  connect(tray, &StatusTrayWindow::meetingModeChanged,
+          [this](bool active) { m_inMeeting = active; });
   connect(preferences->language, &SettingWithSignal::changed, this,
           [this]() { LanguageSelect::setLanguage(preferences->language->get()); });
   connect(this, &SaneBreakApp::quit, qApp, &QApplication::quit, Qt::QueuedConnection);
