@@ -232,6 +232,12 @@ void AbstractApp::onBattery() {
 void AbstractApp::onPower() { resumeBreak(SaneBreak::PauseReason::OnBattery); }
 
 void AbstractApp::onSleepEnd(int duration) {
+  if (!m_windowControl->isShowing() && m_inMeeting) {
+    // We don't want to show the break screen when in a meeting. We also don't want to
+    // count it as break time, because it likely isn't a break. Only if a break is
+    // already started do we count sleep time during a meeting as break time.
+    return;
+  }
   if (duration / 1000 > preferences->bigFor->get()) {
     // If the break is longer than big break, this break is a big break
     m_breakCycleCount = 0;
